@@ -9,7 +9,7 @@ import path from "path";
 // --- Configuration & Clients ---
 const config = {
   ai: {
-    token: process.env["GH_AI_TOKEN"],
+    token: process.env["GH_AI_TOKEN"] || process.env["GITHUB_TOKEN"],
     endpoint: "https://models.github.ai/inference",
   },
   github: {
@@ -29,7 +29,7 @@ const aiClient = ModelClient(config.ai.endpoint, new AzureKeyCredential(config.a
 
 // --- Validation ---
 if (!config.ai.token) {
-  console.error("Error: GH_AI_TOKEN not found.");
+  console.error("Error: Neither GH_AI_TOKEN nor GITHUB_TOKEN found for AI authentication.");
   process.exit(1);
 }
 if (!config.github.token || !config.github.commentBody || !config.github.issueNumber || !config.github.repoOwner || !config.github.repoName) {
