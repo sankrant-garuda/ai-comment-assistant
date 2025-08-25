@@ -1,0 +1,63 @@
+name: 'AI Comment Assistant'
+description: 'Add intelligent AI responses to GitHub issues with /ai commands - supports multiple AI models with context-aware conversations'
+branding:
+  icon: 'message-circle'
+  color: 'blue'
+
+inputs:
+  github_token:
+    description: 'GitHub token for repository access (usually GITHUB_TOKEN)'
+    required: false
+    default: ${{ github.token }}
+  custom_prompt_path:
+    description: 'Path to custom system prompt file'
+    required: false
+  allowed_users:
+    description: 'Comma-separated list of allowed users (leave empty for all users)'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup AI Comment Assistant
+      shell: bash
+      run: |
+        echo "🤖 Setting up AI Comment Assistant..."
+        
+        # Create .github directories if they don't exist
+        mkdir -p .github/workflows .github/scripts .github/prompts
+        
+        # Copy AI assistant files
+        cp ${{ github.action_path }}/.github/workflows/aicomment.yml .github/workflows/
+        cp ${{ github.action_path }}/.github/scripts/aicomment.js .github/scripts/
+        cp ${{ github.action_path }}/.github/model-map.json .github/
+        cp ${{ github.action_path }}/.github/prompts/prompt.md .github/prompts/
+        
+        # Copy custom prompt if provided
+        if [ -n "${{ inputs.custom_prompt_path }}" ] && [ -f "${{ inputs.custom_prompt_path }}" ]; then
+          cp "${{ inputs.custom_prompt_path }}" .github/prompts/prompt.md
+          echo "📝 Custom prompt applied"
+        fi
+        
+        # Commit the files
+        git config --local user.email "action@github.com"
+        git config --local user.name "AI Comment Assistant"
+        git add .github/
+        
+        if git diff --staged --quiet; then
+          echo "✅ AI Comment Assistant already configured"
+        else
+          git commit -m "feat: add AI Comment Assistant
+
+- Add intelligent /ai command support for issues
+- Support multiple AI models (GPT, Claude, DeepSeek, Llama, Grok)
+- Context-aware conversations with full issue history
+- Zero configuration required - works with GitHub tokens
+
+Usage: Comment /ai <your question> on any issue"
+          echo "✅ AI Comment Assistant configured successfully"
+          echo "💡 Test with: /ai hello world"
+        fi
+
+author: 'sankrant'
+url: 'https://github.com/sankrant/ai-comment-assistant'
