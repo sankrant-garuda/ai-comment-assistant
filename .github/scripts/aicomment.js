@@ -115,10 +115,10 @@ function getSystemPrompt() {
  * @returns {object} The model map object.
  */
 function loadModelMap() {
-    const mapPath = path.join(__dirname, '../../model-map.json');
+    const mapPath = path.join(__dirname, '../model-map.json');
     if (!fs.existsSync(mapPath)) {
         // This is a fatal error for the action itself, as the file should be co-located.
-        throw new Error('CRITICAL: model-map.json not found in the action directory.');
+        throw new Error('CRITICAL: model-map.json not found in the .github directory.');
     }
     const fileContent = fs.readFileSync(mapPath, 'utf-8');
     return JSON.parse(fileContent);

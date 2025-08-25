@@ -1,0 +1,22 @@
+{
+  "type": "module",
+  "name": "ai-comment-assistant",
+  "version": "1.0.0",
+  "description": "Transform GitHub issues into intelligent help desk with AI responses",
+  "main": ".github/scripts/aicomment.js",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "ai",
+    "github",
+    "assistant",
+    "issues",
+    "automation",
+    "gpt",
+    "claude",
+    "comments"
+  ],
+  "author": "Sankrant Sanu",
+  "license": "MIT"
+}
